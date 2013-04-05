@@ -1,4 +1,4 @@
-limport numpy as np 
+import numpy as np 
 import re
 
 def get_data_from_file(file):
