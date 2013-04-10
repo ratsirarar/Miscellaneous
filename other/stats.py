@@ -2,9 +2,10 @@
 import numpy as np
 import re
 import math
+from collections import OrderedDict
 
-def class_width(HIGHEST_VALUE, class_number):
-	return (HIGHEST_VALUE - LOWEST_VALUE)/class_number
+def class_width(data, class_number):
+	return ((max(data) - min(data))/class_number) + 1
 
 def format_data(data):
 	data_array = data.split(' ')
@@ -66,23 +67,59 @@ def median(data):
 	length = len(data)
 	position = (length + 1) / 2
 	if length % 2 == 0 :
-		return (data[position-1] + data[position]) / float(2), data
-	else: 
-		return data[position-1], data
+		return (data[position-1] + data[position]) / float(2), data 
+	return data[position-1], data
 
 
 def mean(data,):
 	return sum(data) / float(len(data))
 	
 def variance(data, type="sample"):
+	sum_of_squares = sum(map(lambda x: (x - mean(data)) ** 2, data))
 	if type != "sample":
-		return sum(map(lambda x: (x - mean(data)) ** 2, data)) / float( len(data) )
-	return sum(map(lambda x: (x - mean(data)) ** 2, data)) / float( len(data) -1 )
+		return sum_of_squares / float( len(data) )
+	return sum_of_squares / float( len(data) -1 )
 
 def std_deviation(data, type="sample"):
 	if type != "sample":
 		return math.sqrt(variance(data, type="population"))
 	return math.sqrt(variance(data))
+
+def stem_and_leaf(data, size_stem=1):
+	"""
+	Construct a stem and leaf display
+	@var data string 
+	@var size_stem int : number of digit
+
+	>>> data = [12, 12, 13, 13, 15, 15,
+				17, 17, 12, 12, 12, 12, 
+				12, 13, 13, 14, 14, 14, 
+				15, 15, 16, 16, 16, 17,
+				18, 18, 18, 19, 12, 14,
+				16, 19, 12, 12, 15, 15, 
+				17, 17, 20, 20]
+	>>>  stem_and_leaf(data)
+
+	1 | 2 2 3 3 5 5 
+	2 | 0 0 
+	"""
+	data = sorted(data)
+	display = OrderedDict()
+	min_digit_size = size_stem + 1
+	for item in data:
+		str_item = str(item)
+		if len(str_item) < min_digit_size:
+			str_item = '0%s' % str_item
+
+		if str_item[0] not in display:
+			display[str_item[0]] = [str_item[1:]]
+		else:
+			display[str_item[0]].append(str_item[1:])
+
+	#display stem and leaf 
+	for k , v in display.iteritems():
+		print "{0} | {1}".format(k, ' '.join(v))
+
 
 #print mean()
 
