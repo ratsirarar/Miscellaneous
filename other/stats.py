@@ -23,6 +23,8 @@ def get_class_limit(data, width):
 		temp_value = next_lower_limit
   	return class_limit
 
+#********** Central Tendency ************
+
 def mode(data):
 	"""
 	Evaluate the mode, the value that occurs the most frequently
@@ -120,7 +122,30 @@ def stem_and_leaf(data, size_stem=1):
 	for k , v in display.iteritems():
 		print "{0} | {1}".format(k, ' '.join(v))
 
+def coefficient_of_variance(data):
+	return (std_deviation(data) / float(mean(data))) * 100
 
+#*********** Probability *************
+
+def factorial(n):
+	#dependent
+	#using Y combinator
+	return (lambda f: (lambda c: c(c))(lambda x: f(lambda t: x(x)(t))))(lambda c: lambda n: 1 if n<=1 else n*c(n-1))(n)
+
+def permutation(n, c):
+	#grouping with order
+	return factorial(n) / float(factorial(n - c))
+
+def combination(n, c):
+	#grouping
+	return factorial(n) / float(factorial(n)) * factorial(n-c)
+
+
+
+# def fact(n):
+# 	if n <= 1:
+# 		return 1
+# 	return n * factorial(n-1)
 #print mean()
 
 # raw_data = "261 271 236 244 279 296 284 299 288 288 338 360 341 333 261 266 287 296 313 311 299 303 277 283 304 305 288 290 288 289 332 330 309 328 307 328 285 291 295 298 310 318 318 320 333 321 323 324 327 247 256 307 307 297 299 306 315"
